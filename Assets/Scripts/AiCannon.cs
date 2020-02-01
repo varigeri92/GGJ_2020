@@ -53,6 +53,7 @@ public class AiCannon : MonoBehaviour
 		GameObject currentProjectile = Instantiate(projectilePrefab, projectieSpawn.position, Quaternion.identity);
 		Rigidbody rigidbody = currentProjectile.GetComponent<Rigidbody>();
 		rigidbody.velocity = velocity;
+        GameSystemManager.Instance.OnCanonShot();
 	}
 
 

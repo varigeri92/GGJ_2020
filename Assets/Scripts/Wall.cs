@@ -6,13 +6,15 @@ public class Wall : MonoBehaviour
 {
     [SerializeField] WallProperties properties;
     Rigidbody rb;
-    
+
+    BoxCollider collider;
 
     public bool placed = false;
 
     int durability;
     private void Awake()
     {
+        collider = GetComponent<BoxCollider>();
         rb = GetComponent<Rigidbody>();
         durability = properties.durability;
     }
@@ -21,11 +23,13 @@ public class Wall : MonoBehaviour
     {
         if (!placed)
         {
-            transform.position = GameSystemManager.Instance.worldMousePosition;
+            transform.parent.position = GameSystemManager.Instance.worldMousePosition;
 
             if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 placed = true;
+                GameSystemManager.Instance.AddWall(this);
+                collider.enabled = true;
             }
         }
     }
