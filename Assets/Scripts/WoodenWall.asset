@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b898b27247034f4d84eb5526f86e1af, type: 3}
   m_Name: WoodenWall
   m_EditorClassIdentifier: 
-  durability: 4
+  durability: 2
