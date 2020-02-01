@@ -92,7 +92,7 @@ public class AiCannon : MonoBehaviour
 			RaycastHit hit;
 			if (Physics.Linecast(prev, pos, out hit)) {
 				//Check if correct Target will be hit
-				if (hit.collider.CompareTag("Player")) {
+				if (hit.collider.CompareTag("OurHeroes")) {
 					hit.collider.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
 					targetWillBeHit = true;
 					break;
