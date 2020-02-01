@@ -72,5 +72,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar_Pivot_R
       objectReference: {fileID: 0}
+    - target: {fileID: 5599016157693324386, guid: a72ca6a887bf27b47afb3624111b217d,
+        type: 3}
+      propertyPath: properties
+      value: 
+      objectReference: {fileID: 11400000, guid: 8cbbe5c2bd1d640408f0d021d652c5c9,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a72ca6a887bf27b47afb3624111b217d, type: 3}

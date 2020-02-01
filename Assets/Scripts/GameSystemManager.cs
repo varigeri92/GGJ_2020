@@ -74,10 +74,8 @@ public class GameSystemManager : MonoBehaviour
 
     private void Update()
     {
-        if (shootOver) {
-            OnShotOver();
 
-        }
+
 
 
         Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
@@ -112,8 +110,8 @@ public class GameSystemManager : MonoBehaviour
     IEnumerator KinematicTimer()
     {
         yield return new WaitForSeconds(5f);
-        //OnShotOver();
-        shootOver = true;
+        OnShotOver();
+        //shootOver = true;
     }
 
     public void StartTimer()

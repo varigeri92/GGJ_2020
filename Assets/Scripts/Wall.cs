@@ -11,12 +11,20 @@ public class Wall : MonoBehaviour
 
     public bool placed = false;
 
+    [SerializeField] List<GameObject> destructionlevels = new List<GameObject>();
+    int destuctionLevel = 0;
+
     int durability;
     private void Awake()
     {
         collider = GetComponent<BoxCollider>();
         rb = GetComponent<Rigidbody>();
         durability = properties.durability;
+        foreach (GameObject go in destructionlevels)
+        {
+            go.SetActive(false);
+        }
+        destructionlevels[0].SetActive(true);
     }
 
     private void Update()
@@ -39,22 +47,33 @@ public class Wall : MonoBehaviour
         if (collision.collider.CompareTag("projectile"))
         {
             float impactForce = collision.collider.GetComponent<Projectile>().GetImpactForce();
-            if (impactForce > 10 && impactForce < 20)
+            if (impactForce > 1)
             {
-                durability -= 1;
-            }else if (impactForce >= 20)
-            {
-                durability -= 2;
             }
+            Debug.Log(impactForce);
+            durability -= 1;
 
             if (durability <= 0)
             {
                 durability = 0;
-                gameObject.SetActive(false);
+                // gameObject.SetActive(false);
+                collider.enabled = false;
+                rb.isKinematic = true;
+                foreach (GameObject go in destructionlevels)
+                {
+                    go.SetActive(false);
+                }
+                destructionlevels[2].SetActive(true);
+                StartCoroutine(DestroyTimer());
+            }else if (durability < 2)
+            {
+                foreach (GameObject go in destructionlevels)
+                {
+                    go.SetActive(false);
+                }
+                destructionlevels[1].SetActive(true);
             }
         }
-
-
     }
 
     public float GetImpactForce()
@@ -64,12 +83,17 @@ public class Wall : MonoBehaviour
 
     public float GetMagnitude()
     {
-        Debug.Log(rb.velocity.magnitude);
         return rb.velocity.magnitude;
     }
 
     public void TurnKinematic(bool turn)
     {
         rb.isKinematic = turn;
+    }
+
+    IEnumerator DestroyTimer()
+    {
+        yield return new WaitForSeconds(5f);
+        gameObject.SetActive(false);
     }
 }
