@@ -38,12 +38,22 @@ public class Wall : MonoBehaviour
     {
         if (collision.collider.CompareTag("projectile"))
         {
-            durability -= 1;
+            float impactForce = collision.collider.GetComponent<Projectile>().GetImpactForce();
+            if (impactForce > 10 && impactForce < 20)
+            {
+                durability -= 1;
+            }else if (impactForce >= 20)
+            {
+                durability -= 2;
+            }
+
             if (durability <= 0)
             {
                 durability = 0;
                 gameObject.SetActive(false);
             }
+
+            
         }
     }
 
