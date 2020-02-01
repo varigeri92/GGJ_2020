@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 /// <summary>
 /// Behaviour of AI controlled Cannon
@@ -18,20 +20,26 @@ public class AiCannon : MonoBehaviour
 	//Math Stuff
 	private float launchAngle;
 	private const float gravity = 9.81f;
+	private float elapsedTime = 0;
 
 	//Conditions
-	private bool targetWillBeHit = false;
+	private bool targetLocked = false;
+	private bool detectionFinished = false;
+	private bool detectionTopReached = false;
+
+	//Target stuff
+	private GameObject targetToShoot;
+	private List<GameObject> potentialTargets = new List<GameObject>();
+	private List<float> launchAngles = new List<float>();
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
 	{
 		//Just for Testing
 		//Delete Later
-		CalculateHitPoint(barrel.transform.position, GetInitialVelocity(), timeStep, projectileTravelDuration);
-		if (targetWillBeHit) {
-			return;
+		if(detectionFinished == false) {
+			LookForTargets();
 		}
-		launchForce = Mathf.PingPong(Time.time * 100, 100);
 	}
 
 	/// <summary>
@@ -39,8 +47,8 @@ public class AiCannon : MonoBehaviour
 	/// </summary>
 	public void Shoot()
 	{
-		if(targetWillBeHit) {
-			Shoot(GetInitialVelocity());
+		if(targetLocked) {
+			StartCoroutine(Shoot(true));
 		}
 	}
 
@@ -48,19 +56,118 @@ public class AiCannon : MonoBehaviour
 	/// Shoot Projectile at Current angle and force
 	/// </summary>
 	/// <param name="velocity">Velocity.</param>
-	private void Shoot(Vector3 velocity)
+	IEnumerator Shoot(bool guiCall = true)
 	{
+		elapsedTime = 0;
+		yield return RotateTo(launchAngle);
+		yield return new WaitForSecondsRealtime(.5f);
+
 		GameObject currentProjectile = Instantiate(projectilePrefab, projectieSpawn.position, Quaternion.identity);
 		Rigidbody rigidbody = currentProjectile.GetComponent<Rigidbody>();
-		rigidbody.velocity = velocity;
+		rigidbody.velocity = GetInitialVelocity();
+
+		yield break;
 	}
 
+	IEnumerator RotateTo(float angle)
+	{
+		float currentAngle = barrel.transform.localEulerAngles.z; 
+		while ((angle - currentAngle) > 0.1f) {
+			elapsedTime += Time.fixedDeltaTime;
+			if (angle > currentAngle) {
+				currentAngle += Mathf.PingPong(elapsedTime * 15, 90);
+			} else {
+				currentAngle -= Mathf.PingPong(elapsedTime * 15, 90);
+			}
+			SetCannonRotation(currentAngle);
+			yield return new WaitForEndOfFrame();
+		}
+	}
+
+	private void LookForTargets()
+	{
+		CalculateHitPoint(barrel.transform.position, GetInitialVelocity(), timeStep, projectileTravelDuration);
+
+		elapsedTime += Time.fixedDeltaTime;
+		launchAngle = Mathf.PingPong(elapsedTime * 30, 90);
+		SetCannonRotation(launchAngle);
+
+		if(Mathf.Abs(launchAngle) >= 89) {
+			detectionTopReached = true;
+		}
+		//Cannon has checked level once
+		//Decide which enemy to shoot
+		if (Mathf.Abs(launchAngle) < 1) {
+			if (detectionTopReached == true) {
+				if (targetLocked == false) {
+					PickTarget();
+				}
+			}
+		}
+	}
+
+	/// <summary>
+	/// Selects a random Target and marks it in Red
+	/// </summary>
+	private void PickTarget()
+	{
+		if(potentialTargets.Count == 0){
+			return;
+		}
+		int targetIndex = Random.Range(0, potentialTargets.Count);
+		targetToShoot = potentialTargets[targetIndex];
+		launchAngle = launchAngles[targetIndex];
+		MarkTarget(targetToShoot, Color.red);
+		detectionFinished = true;
+		targetLocked = true;
+
+		Shoot();
+	}
+
+	/// <summary>
+	/// Add New target to list of potential targets (if its not already in it)
+	/// Mark it blue
+	/// </summary>
+	/// <param name="newTarget">New target.</param>
+	private void AddTargetToList(GameObject newTarget)
+	{
+		if(!potentialTargets.Contains(newTarget)) {
+			potentialTargets.Add(newTarget);
+			launchAngles.Add(launchAngle);
+			MarkTarget(newTarget, Color.blue);
+		}
+	}
+
+	private void MarkTarget(GameObject target, Color color)
+	{
+		target.GetComponent<MeshRenderer>().material.color = color;
+	}
+
+	private void SetCannonRotation(float newAngle)
+	{
+		barrel.transform.localEulerAngles = new Vector3(
+		0,
+		0,
+		newAngle);
+	}
+
+	public void Reset()
+	{
+		potentialTargets.Clear();
+		launchAngles.Clear();
+		targetLocked = false;
+		detectionTopReached = false;
+		detectionFinished = false;
+		launchAngle = 0;
+		elapsedTime = 0;
+		StartCoroutine(RotateTo(0));
+	}
 
 	#region TrajectoryCalculations
 
 	private Vector3 GetInitialVelocity()
 	{
-		return barrel.transform.forward * launchForce;
+		return barrel.transform.right * launchForce;
 	}
 
 	/// <summary>
@@ -93,16 +200,9 @@ public class AiCannon : MonoBehaviour
 			if (Physics.Linecast(prev, pos, out hit)) {
 				//Check if correct Target will be hit
 				if (hit.collider.CompareTag("OurHeroes")) {
-					hit.collider.gameObject.GetComponent<MeshRenderer>().material.color = Color.red;
-					targetWillBeHit = true;
+					AddTargetToList(hit.collider.gameObject);
 					break;
-				} 
-				else {
-					targetWillBeHit = false;
 				}
-			} 
-			else {
-				targetWillBeHit = false;
 			}
 			Debug.DrawLine(prev, pos, Color.red);
 			prev = pos;
