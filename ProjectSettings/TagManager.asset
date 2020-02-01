@@ -6,6 +6,7 @@ TagManager:
   tags:
   - projectile
   - OurHeroes
+  - Wall
   layers:
   - Default
   - TransparentFX

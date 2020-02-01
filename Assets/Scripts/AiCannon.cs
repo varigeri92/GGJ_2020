@@ -66,6 +66,8 @@ public class AiCannon : MonoBehaviour
 		Rigidbody rigidbody = currentProjectile.GetComponent<Rigidbody>();
 		rigidbody.velocity = GetInitialVelocity();
 
+        GameSystemManager.Instance.OnCanonShot();
+
 		yield break;
 	}
 

@@ -48,21 +48,6 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 115452137850080281, guid: f6bc2316ff4127b4098e7bc3cf81af38,
-        type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 115452137850080281, guid: f6bc2316ff4127b4098e7bc3cf81af38,
-        type: 3}
-      propertyPath: m_IsKinematic
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 115452137850080281, guid: f6bc2316ff4127b4098e7bc3cf81af38,
-        type: 3}
-      propertyPath: m_Mass
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 115452137850080285, guid: f6bc2316ff4127b4098e7bc3cf81af38,
         type: 3}
       propertyPath: m_LocalPosition.x

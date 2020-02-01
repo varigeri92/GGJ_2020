@@ -14,7 +14,7 @@ public class GameSystemManager : MonoBehaviour
     public List<Wall> walls = new List<Wall>();
 
     public Vector3 worldMousePosition;
-
+    public bool shootOver = false;
 
     Camera mainCam;
     // Test// 
@@ -45,6 +45,7 @@ public class GameSystemManager : MonoBehaviour
 
     public void OnCanonShot()
     {
+        shootOver = false;
         foreach (Wall wall in walls )
         {
             wall.TurnKinematic(false);
@@ -55,7 +56,10 @@ public class GameSystemManager : MonoBehaviour
     {
         foreach (Wall wall in walls)
         {
-            wall.TurnKinematic(true);
+            if (wall.GetMagnitude() < 0.5)
+            {
+                wall.TurnKinematic(true);
+            }
         }
     }
 
@@ -70,6 +74,12 @@ public class GameSystemManager : MonoBehaviour
 
     private void Update()
     {
+        if (shootOver) {
+            OnShotOver();
+
+        }
+
+
         Ray ray = mainCam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
         Vector3 hitpoint = Vector3.zero;
@@ -101,8 +111,9 @@ public class GameSystemManager : MonoBehaviour
 
     IEnumerator KinematicTimer()
     {
-        yield return new WaitForSeconds(3f);
-        OnShotOver();
+        yield return new WaitForSeconds(5f);
+        //OnShotOver();
+        shootOver = true;
     }
 
     public void StartTimer()

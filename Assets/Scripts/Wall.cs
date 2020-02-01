@@ -52,9 +52,20 @@ public class Wall : MonoBehaviour
                 durability = 0;
                 gameObject.SetActive(false);
             }
-
-            
         }
+
+
+    }
+
+    public float GetImpactForce()
+    {
+        return rb.velocity.magnitude * rb.mass;
+    }
+
+    public float GetMagnitude()
+    {
+        Debug.Log(rb.velocity.magnitude);
+        return rb.velocity.magnitude;
     }
 
     public void TurnKinematic(bool turn)
