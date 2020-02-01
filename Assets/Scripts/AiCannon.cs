@@ -149,8 +149,8 @@ public class AiCannon : MonoBehaviour
 	{
 		barrel.transform.localEulerAngles = new Vector3(
 		0,
-		0,
-		newAngle);
+		newAngle,
+		0);
 	}
 
 	public void Reset()
@@ -169,7 +169,7 @@ public class AiCannon : MonoBehaviour
 
 	private Vector3 GetInitialVelocity()
 	{
-		return barrel.transform.right * launchForce;
+		return (-barrel.transform.right) * launchForce;
 	}
 
 	/// <summary>
