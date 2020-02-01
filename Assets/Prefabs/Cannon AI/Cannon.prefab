@@ -238,5 +238,6 @@ MonoBehaviour:
   projectilePrefab: {fileID: 921890860507969853, guid: 7c9b9ba48487e4b118578c850a474bed,
     type: 3}
   projectieSpawn: {fileID: 7179801966972877046}
-  testVelocity: 2
-  testTimestep: 0.1
+  launchForce: 1
+  timeStep: 0.1
+  projectileTravelDuration: 5
