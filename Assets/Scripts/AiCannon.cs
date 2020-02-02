@@ -119,7 +119,7 @@ public class AiCannon : MonoBehaviour
 		int targetIndex = Random.Range(0, potentialTargets.Count);
 		targetToShoot = potentialTargets[targetIndex];
 		launchAngle = launchAngles[targetIndex];
-		MarkTarget(targetToShoot, Color.red);
+		//MarkTarget(targetToShoot, Color.red);
 		detectionFinished = true;
 		targetLocked = true;
 
@@ -136,7 +136,7 @@ public class AiCannon : MonoBehaviour
 		if(!potentialTargets.Contains(newTarget)) {
 			potentialTargets.Add(newTarget);
 			launchAngles.Add(launchAngle);
-			MarkTarget(newTarget, Color.blue);
+			//MarkTarget(newTarget, Color.blue);
 		}
 	}
 
