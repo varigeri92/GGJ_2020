@@ -38,6 +38,7 @@ public class UIManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape) && mainmenuClosed)
             {
                 mainMenuPanel.SetActive(true);
+                gamePanels.SetActive(false);
                 mainmenuClosed = false;
                 playbuttonText.text = playbtntext_2;
             }
