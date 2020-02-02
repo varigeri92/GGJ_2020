@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class Pig : MonoBehaviour
 {
+
+    public delegate void OnPigDied();
+    public static event OnPigDied onPigDied;
+
     [SerializeField] ParticleSystem pS;
     [SerializeField] AudioSource aS;
 
@@ -19,7 +23,10 @@ public class Pig : MonoBehaviour
             aS.transform.parent = null;
             aS.Play();
             pS.Play();
-
+            if (onPigDied != null)
+            {
+                onPigDied();
+            }
             gameObject.SetActive(false);
 
         }
@@ -31,7 +38,10 @@ public class Pig : MonoBehaviour
                 aS.transform.parent = null;
                 aS.Play();
                 pS.Play();
-
+                if (onPigDied != null)
+                {
+                    onPigDied();
+                }
                 gameObject.SetActive(false);
             }
             
@@ -49,6 +59,7 @@ public class Pig : MonoBehaviour
                 placed = true;
                 collider.enabled = true;
                 GameSystemManager.Instance.pigs.Add(this);
+                GameSystemManager.Instance.PigPlaced();
             }
             if (Input.GetMouseButtonDown(1) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {

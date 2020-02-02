@@ -9792,7 +9792,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 9197361302852631170}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.2
   m_Height: 0.5
   m_Direction: 1
@@ -9811,6 +9811,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pS: {fileID: 5021691046430497118}
   aS: {fileID: 518296119508152652}
+  collider: {fileID: 849622655}
+  rb: {fileID: 849622656}
 --- !u!1001 &9198391118688538424
 PrefabInstance:
   m_ObjectHideFlags: 0

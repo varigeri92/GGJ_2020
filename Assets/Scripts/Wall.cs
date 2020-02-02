@@ -52,6 +52,7 @@ public class Wall : MonoBehaviour
                 placed = true;
                 GameSystemManager.Instance.AddWall(this);
                 collider.enabled = true;
+                GameSystemManager.Instance.wallPlaced(properties.type);
             }
             if (Input.GetMouseButtonDown(1) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {

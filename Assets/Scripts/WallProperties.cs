@@ -6,5 +6,5 @@ using UnityEngine;
 public class WallProperties : ScriptableObject
 {
     public int durability;
-    Material material;
+    public WallType type;
 }

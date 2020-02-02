@@ -25,7 +25,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject gameOverPanel;
     [SerializeField] GameObject mainMenuPanel;
     [SerializeField] GameObject gamePanels;
+    [SerializeField] GameObject LevelComplettePanel;
     [SerializeField] GameObject clock;
+
+
+    bool isFirstSession = true;
 
     private void Start()
     {
@@ -56,12 +60,15 @@ public class UIManager : MonoBehaviour
 
     void ShowGameOver()
     {
-
+        gameOverPanel.SetActive(true);
+        gamePanels.SetActive(false);
+        clock.SetActive(false);
     }
 
     void ShowLevelComplete()
     {
-
+        LevelComplettePanel.SetActive(true);
+        gamePanels.SetActive(false);
     }
 
 
@@ -92,5 +99,10 @@ public class UIManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void ResetGame()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 }

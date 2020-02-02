@@ -1,11 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
+
+public enum WallType
+{
+    Wood,
+    Concrete
+}
 public class GameSystemManager : MonoBehaviour
 {
     //Singleton:
 
+    bool sandboxMode = false;
     static GameSystemManager instance;
     public static GameSystemManager Instance { get => instance; set => instance = value; }
 
@@ -23,20 +32,34 @@ public class GameSystemManager : MonoBehaviour
 
     public LayerMask layerMask;
 
+    [SerializeField]  int Wood;
+    [SerializeField]  int Concrete;
+
     public List<Wall> walls = new List<Wall>();
     public List<Pig> pigs = new List<Pig>();
 
     public Vector3 worldMousePosition;
+
     public bool shootOver = false;
 
+    bool gameOverOrWhatever;
+
+    [SerializeField] TMP_Text shotLeftText;
+    [SerializeField] TMP_Text pigsaliveText;
+    [SerializeField] TMP_Text allpigsText;
     [SerializeField] int timetoBuild;
     int ttb = 0;
-    [SerializeField] UnityEngine.UI.Image clockImageF;
-    [SerializeField] UnityEngine.UI.Image clockImageB;
+    [SerializeField] Image clockImageF;
+    [SerializeField] Image clockImageB;
 
-    UnityEngine.UI.Image currentImage;
+    [SerializeField] Button woodButton;
+    [SerializeField] TMP_Text woodCountText;
+    [SerializeField] Button concreteButton;
+    [SerializeField] TMP_Text concreteCountText;
 
-    [SerializeField] TMPro.TMP_Text timeText;
+    [SerializeField] Button pigButton;
+
+    [SerializeField] TMP_Text timeText;
     float imageFill  = 0f;
 
     bool build = false;
@@ -59,7 +82,7 @@ public class GameSystemManager : MonoBehaviour
 
     private void Awake()
     {
-
+        allpigsText.text = expectedPigCount.ToString();
         if (instance == null)
         {
             instance = this;
@@ -90,14 +113,19 @@ public class GameSystemManager : MonoBehaviour
         {
             pig.SetKinematic(false);
         }
-        
+        shotsLeft--;
+        shotLeftText.text = shotsLeft.ToString();
     }
 
     public void OnShotOver()
     {
         if (shotsLeft <= 0)
         {
-            Debug.Log("Thanx 4 Playing or little game");
+            gameOverOrWhatever = true;
+            onLevelComplette();
+            Debug.Log("Thanx 4 Playing ou" +
+                "r little game");
+            return;
         }
 
         foreach (Wall wall in walls)
@@ -121,8 +149,12 @@ public class GameSystemManager : MonoBehaviour
     {
         pigsAlive = GameObject.FindGameObjectsWithTag("OurHeroes").Length;
 
+        pigsaliveText.text = pigsAlive.ToString();
+
         if (pigsAlive == 0)
         {
+            gameOverOrWhatever = true;
+            build = false;
             Debug.Log("Your Chickens Died a horrible death!");
             onGameOver();
         }
@@ -155,9 +187,6 @@ public class GameSystemManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-
-            WreckingBall.AddForce(new Vector3(1,0,0) * 1, ForceMode.Impulse);
-
             OnCanonShot();
         }
 
@@ -175,10 +204,42 @@ public class GameSystemManager : MonoBehaviour
         }
     }
 
-    private void ResetTimer()
+    public void PigPlaced()
     {
-
+        pigsAlive++;
+        pigsaliveText.text = pigsAlive.ToString();
+        if (pigsAlive == expectedPigCount)
+        {
+            pigButton.interactable = false;
+        }
     }
+
+    public void wallPlaced(WallType wallType)
+    {
+        switch (wallType)
+        {
+            case WallType.Wood:
+                Wood --;
+                break;
+            case WallType.Concrete:
+                Concrete --;
+                break;
+
+            default:
+                break;
+        }
+        woodCountText.text = Wood.ToString();
+        if (Wood == 0)
+        {
+            woodButton.interactable = false;
+        }
+        concreteCountText.text = Concrete.ToString();
+        if (Concrete == 0)
+        {
+            concreteButton.interactable = false;
+        }
+    }
+
 
     void BuildTimer()
     {
