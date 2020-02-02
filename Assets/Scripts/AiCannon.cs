@@ -79,6 +79,7 @@ public class AiCannon : MonoBehaviour
 		rigidbody.velocity = GetInitialVelocity();
 
 		audioSource.PlayOneShot(audioSource.clip);
+		GetComponentInChildren<ParticleSystem>().Play();
 
         GameSystemManager.Instance.OnCanonShot();
 
