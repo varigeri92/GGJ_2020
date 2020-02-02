@@ -41,7 +41,7 @@ public class UIManager : MonoBehaviour
 
     void ResetTimer()
     {
-        clock.SetActive(false);
+        clock.SetActive(true);
     }
 
     private void Update()

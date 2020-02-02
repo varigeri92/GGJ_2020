@@ -68,7 +68,6 @@ public class Wall : MonoBehaviour
             if (impactForce > 1)
             {
             }
-            Debug.Log(impactForce);
             durability -= 1;
 
             if (durability <= 0)

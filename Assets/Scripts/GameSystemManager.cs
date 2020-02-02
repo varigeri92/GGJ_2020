@@ -22,7 +22,8 @@ public class GameSystemManager : MonoBehaviour
     public Vector3 worldMousePosition;
     public bool shootOver = false;
 
-    [SerializeField] int timetoBuild = 30;
+    [SerializeField] int timetoBuild;
+    int ttb = 0;
     [SerializeField] UnityEngine.UI.Image clockImageF;
     [SerializeField] UnityEngine.UI.Image clockImageB;
 
@@ -64,6 +65,8 @@ public class GameSystemManager : MonoBehaviour
         {
             walls.Add(wall);
         }
+        timeText.text = timetoBuild.ToString();
+        ttb = timetoBuild;
     }
 
     public void OnCanonShot()
@@ -77,6 +80,7 @@ public class GameSystemManager : MonoBehaviour
 
     public void OnShotOver()
     {
+        Debug.Log("Round Over! BOI!");
         foreach (Wall wall in walls)
         {
             wall.TurnKinematic(true);
@@ -85,6 +89,9 @@ public class GameSystemManager : MonoBehaviour
         {
             onRoundOver();
         }
+        build = true;
+        ttb = timetoBuild;
+        timeText.text = timetoBuild.ToString();
         FindPigs();
     }
 
@@ -145,6 +152,11 @@ public class GameSystemManager : MonoBehaviour
         }
     }
 
+    private void ResetTimer()
+    {
+
+    }
+
     void BuildTimer()
     {
         if (build)
@@ -153,22 +165,22 @@ public class GameSystemManager : MonoBehaviour
             if (imageFill >= 1)
             {
                 imageFill = 0;
-                timetoBuild--;
-               
-               
-                if (timetoBuild == 3)
+                ttb--;
+                timeText.text = ttb.ToString();
+
+
+                if (ttb == 3)
                 {
                     cannon.Reset();
-
                 }
-                if (timetoBuild == 0)
+                if (ttb == 0)
                 {
                     build = false;
                     if (onBuildtimeOver != null)
                     {
                         onBuildtimeOver();
                     }
-                    timetoBuild = 30;
+                    ttb = timetoBuild;
                 }
             }
             if (front)
@@ -192,6 +204,7 @@ public class GameSystemManager : MonoBehaviour
 
     IEnumerator KinematicTimer()
     {
+        Debug.Log("Timer started!");
         yield return new WaitForSeconds(5f);
         OnShotOver();
         //shootOver = true;
@@ -199,6 +212,7 @@ public class GameSystemManager : MonoBehaviour
 
     public void StartTimer()
     {
+        Debug.Log("BOI!!");
         if (timer == null)
         {
             timer = KinematicTimer();
@@ -206,7 +220,7 @@ public class GameSystemManager : MonoBehaviour
         }
         else
         {
-            StopCoroutine(timer);
+            timer = KinematicTimer();
             StartCoroutine(timer);
         }
     }
