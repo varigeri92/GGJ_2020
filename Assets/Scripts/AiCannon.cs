@@ -36,7 +36,8 @@ public class AiCannon : MonoBehaviour
 
 	private void Start()
 	{
-		audioSource = GetComponentInChildren<AudioSource>();
+        SetDetectionBool(true);
+        audioSource = GetComponentInChildren<AudioSource>();
 	}
 	// Update is called once per frame
 	void FixedUpdate()
@@ -47,6 +48,11 @@ public class AiCannon : MonoBehaviour
 			LookForTargets();
 		}
 	}
+
+    public void SetDetectionBool(bool lookForTarget)
+    {
+        detectionFinished = lookForTarget;
+    }
 
 	/// <summary>
 	/// Use this for Test shooting by UI Button click
