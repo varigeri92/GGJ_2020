@@ -103,10 +103,9 @@ public class AiCannon : MonoBehaviour
 
 	private void LookForTargets()
 	{
-		CalculateHitPoint(projectieSpawn.transform.position, GetInitialVelocity(), timeStep, projectileTravelDuration);
-
-		elapsedTime += Time.fixedDeltaTime;
 		launchAngle = Mathf.PingPong(elapsedTime * 30, 90);
+		CalculateHitPoint(projectieSpawn.transform.position, GetInitialVelocity(), timeStep, projectileTravelDuration);
+		elapsedTime += Time.fixedDeltaTime;
 		SetCannonRotation(launchAngle);
 
 		if(Mathf.Abs(launchAngle) >= 89) {
@@ -148,6 +147,7 @@ public class AiCannon : MonoBehaviour
 	/// <param name="newTarget">New target.</param>
 	private void AddTargetToList(GameObject newTarget)
 	{
+		Debug.Log("ADD");
 		if(!potentialTargets.Contains(newTarget)) {
 			potentialTargets.Add(newTarget);
 			launchAngles.Add(launchAngle);
@@ -168,18 +168,23 @@ public class AiCannon : MonoBehaviour
 		0);
 	}
 
+	public void StartScanning()
+	{
+		detectionFinished = false;
+	}
+
 	public void Reset()
 	{
 		potentialTargets.Clear();
 		launchAngles.Clear();
+		launchAngle = 0;
+		elapsedTime = 0;
 		targetLocked = false;
 		detectionTopReached = false;
 		detectionFinished = false;
-		launchAngle = 0;
-		elapsedTime = 0;
-		StartCoroutine(RotateTo(0));
+		targetToShoot = null;
+		SetCannonRotation(0);
 	}
-
 	#region TrajectoryCalculations
 
 	private Vector3 GetInitialVelocity()
@@ -214,7 +219,7 @@ public class AiCannon : MonoBehaviour
 			if (t > maxTime) break;
 			Vector3 pos = GetTrajectoryAtTime(start, startVelocity, t);
 			RaycastHit hit;
-			if (Physics.Linecast(prev, pos, out hit)) {
+			if (Physics.Linecast(prev, pos, out hit, 1 << 9)) {
 				//Check if correct Target will be hit
 				if (hit.collider.CompareTag("OurHeroes")) {
 					AddTargetToList(hit.collider.gameObject);
