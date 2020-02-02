@@ -12,6 +12,7 @@ public class AiCannon : MonoBehaviour
 	[SerializeField] private GameObject barrel;
 	[SerializeField] private GameObject projectilePrefab;
 	[SerializeField] private Transform projectieSpawn;
+	private AudioSource audioSource;
 	[Header("Shooting Parameters")]
 	[SerializeField] private float launchForce;
 	[SerializeField] private float timeStep;
@@ -32,8 +33,13 @@ public class AiCannon : MonoBehaviour
 	private List<GameObject> potentialTargets = new List<GameObject>();
 	private List<float> launchAngles = new List<float>();
 
-    // Update is called once per frame
-    void FixedUpdate()
+
+	private void Start()
+	{
+		audioSource = GetComponentInChildren<AudioSource>();
+	}
+	// Update is called once per frame
+	void FixedUpdate()
 	{
 		//Just for Testing
 		//Delete Later
@@ -66,6 +72,8 @@ public class AiCannon : MonoBehaviour
 		Rigidbody rigidbody = currentProjectile.GetComponent<Rigidbody>();
 		rigidbody.velocity = GetInitialVelocity();
 
+		audioSource.PlayOneShot(audioSource.clip);
+
         GameSystemManager.Instance.OnCanonShot();
 
 		yield break;
@@ -74,21 +82,21 @@ public class AiCannon : MonoBehaviour
 	IEnumerator RotateTo(float angle)
 	{
 		float currentAngle = barrel.transform.localEulerAngles.z; 
-		while ((angle - currentAngle) > 0.1f) {
+		while ((angle - currentAngle) > 0.05f) {
 			elapsedTime += Time.fixedDeltaTime;
 			if (angle > currentAngle) {
 				currentAngle += Mathf.PingPong(elapsedTime * 15, 90);
 			} else {
 				currentAngle -= Mathf.PingPong(elapsedTime * 15, 90);
 			}
-			SetCannonRotation(currentAngle);
+			SetCannonRotation(angle);
 			yield return new WaitForEndOfFrame();
 		}
 	}
 
 	private void LookForTargets()
 	{
-		CalculateHitPoint(barrel.transform.position, GetInitialVelocity(), timeStep, projectileTravelDuration);
+		CalculateHitPoint(projectieSpawn.transform.position, GetInitialVelocity(), timeStep, projectileTravelDuration);
 
 		elapsedTime += Time.fixedDeltaTime;
 		launchAngle = Mathf.PingPong(elapsedTime * 30, 90);
