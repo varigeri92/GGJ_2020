@@ -3,7 +3,27 @@ guid: d2991be7abdcf4f2c8604ba74b98f0ee
 ModelImporter:
   serializedVersion: 19300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TreeLeavesBright
+    second: {fileID: 2100000, guid: add51cc3337b24e828b953221b399c47, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TreeLeavesDark
+    second: {fileID: 2100000, guid: a42a485eacf1b43b1aeaee784c18e328, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TreeTrunk
+    second: {fileID: 2100000, guid: f1e53b7e5398644f89597159e2dc487c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TreeTrunkDark
+    second: {fileID: 2100000, guid: a2fbd86ff385d43cd81516e96853d748, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -80,7 +100,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.049999997
+    globalScale: 5
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
