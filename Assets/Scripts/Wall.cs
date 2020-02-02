@@ -13,7 +13,7 @@ public class Wall : MonoBehaviour
 
     [SerializeField] List<GameObject> destructionlevels = new List<GameObject>();
     int destuctionLevel = 0;
-    float rotaionSpeed = 500; 
+    float rotaionSpeed = 5000; 
 
     int durability;
     AudioSource source;
