@@ -31,18 +31,39 @@ public class UIManager : MonoBehaviour
     {
         gameStarted = true;
         GameSystemManager.onRoundOver += ResetTimer;
+        GameSystemManager.onBuildtimeOver += hideClock;
+        GameSystemManager.onLevelComplette += ShowLevelComplete;
+        GameSystemManager.onGameOver += ShowGameOver;
 
     }
 
     private void OnDestroy()
     {
         GameSystemManager.onRoundOver -= ResetTimer;
+        GameSystemManager.onBuildtimeOver -= hideClock;
+        GameSystemManager.onLevelComplette -= ShowLevelComplete;
+        GameSystemManager.onGameOver -= ShowGameOver;
     }
 
     void ResetTimer()
     {
         clock.SetActive(true);
     }
+    void hideClock()
+    {
+        clock.SetActive(false);
+    }
+
+    void ShowGameOver()
+    {
+
+    }
+
+    void ShowLevelComplete()
+    {
+
+    }
+
 
     private void Update()
     {

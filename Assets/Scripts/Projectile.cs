@@ -15,7 +15,6 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Hello!");
         GameSystemManager.Instance.StartTimer();
         StartCoroutine(DestroyProjectile());
     }

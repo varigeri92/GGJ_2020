@@ -15,9 +15,16 @@ public class GameSystemManager : MonoBehaviour
     public delegate void OnRoundOver();
     public static event OnRoundOver onRoundOver;
 
+    public delegate void OnGameOver();
+    public static event OnGameOver onGameOver;
+
+    public delegate void OnLevelComplette();
+    public static event OnLevelComplette onLevelComplette;
+
     public LayerMask layerMask;
 
     public List<Wall> walls = new List<Wall>();
+    public List<Pig> pigs = new List<Pig>();
 
     public Vector3 worldMousePosition;
     public bool shootOver = false;
@@ -37,6 +44,8 @@ public class GameSystemManager : MonoBehaviour
 
     [SerializeField] int expectedPigCount;
     [SerializeField] int pigsAlive;
+
+    [SerializeField] int shotsLeft;
 
     [SerializeField] AiCannon cannon;
     Camera mainCam;
@@ -76,19 +85,27 @@ public class GameSystemManager : MonoBehaviour
         {
             wall.TurnKinematic(false);
         }
+
+        foreach (Pig pig in pigs)
+        {
+            pig.SetKinematic(false);
+        }
+        
     }
 
     public void OnShotOver()
     {
-        Debug.Log("Round Over! BOI!");
+        if (shotsLeft <= 0)
+        {
+            Debug.Log("Thanx 4 Playing or little game");
+        }
+
         foreach (Wall wall in walls)
         {
             wall.TurnKinematic(true);
         }
-        if (onRoundOver != null)
-        {
-            onRoundOver();
-        }
+        onRoundOver();
+
         build = true;
         ttb = timetoBuild;
         timeText.text = timetoBuild.ToString();
@@ -103,6 +120,12 @@ public class GameSystemManager : MonoBehaviour
     public void FindPigs()
     {
         pigsAlive = GameObject.FindGameObjectsWithTag("OurHeroes").Length;
+
+        if (pigsAlive == 0)
+        {
+            Debug.Log("Your Chickens Died a horrible death!");
+            onGameOver();
+        }
     }
 
 
