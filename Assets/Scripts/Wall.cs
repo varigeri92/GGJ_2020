@@ -26,6 +26,13 @@ public class Wall : MonoBehaviour
             go.SetActive(false);
         }
         destructionlevels[0].SetActive(true);
+
+        GameSystemManager.onBuildtimeOver += OnBuildtimeOver;
+    }
+
+    private void OnDestroy()
+    {
+        GameSystemManager.onBuildtimeOver -= OnBuildtimeOver;
     }
 
     private void Update()
@@ -109,5 +116,13 @@ public class Wall : MonoBehaviour
     {
         yield return new WaitForSeconds(5f);
         gameObject.SetActive(false);
+    }
+
+    void OnBuildtimeOver()
+    {
+        if (!placed)
+        {
+            Destroy(gameObject);
+        }
     }
 }

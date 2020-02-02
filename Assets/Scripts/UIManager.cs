@@ -25,10 +25,23 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject gameOverPanel;
     [SerializeField] GameObject mainMenuPanel;
     [SerializeField] GameObject gamePanels;
+    [SerializeField] GameObject clock;
 
     private void Start()
     {
         gameStarted = true;
+        GameSystemManager.onRoundOver += ResetTimer;
+
+    }
+
+    private void OnDestroy()
+    {
+        GameSystemManager.onRoundOver -= ResetTimer;
+    }
+
+    void ResetTimer()
+    {
+        clock.SetActive(false);
     }
 
     private void Update()
@@ -52,6 +65,7 @@ public class UIManager : MonoBehaviour
         mainmenuClosed = true;
         mainMenuPanel.SetActive(false);
         gamePanels.SetActive(true);
+        clock.SetActive(true);
     }
 
     public void QuitGame()
