@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: WoodenWall
   m_EditorClassIdentifier: 
   durability: 2
+  type: 0
+  destroyedClip: {fileID: 8300000, guid: 34b857c476a4c894e8fbfd6c5e2bd2de, type: 3}
+  damagedClip: {fileID: 8300000, guid: ba21d4084f6a0ed498ab8019a0f6526f, type: 3}

@@ -52,6 +52,7 @@ public class UIManager : MonoBehaviour
     void ResetTimer()
     {
         clock.SetActive(true);
+        Camera.main.GetComponent<CameraController>().ZoomIn();
     }
     void hideClock()
     {
