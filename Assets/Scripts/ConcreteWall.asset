@@ -13,3 +13,6 @@ MonoBehaviour:
   m_Name: ConcreteWall
   m_EditorClassIdentifier: 
   durability: 3
+  type: 1
+  destroyedClip: {fileID: 8300000, guid: c6556e171717f154bb299699e7d09767, type: 3}
+  damagedClip: {fileID: 8300000, guid: c6556e171717f154bb299699e7d09767, type: 3}

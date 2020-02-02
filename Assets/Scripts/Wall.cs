@@ -16,8 +16,10 @@ public class Wall : MonoBehaviour
     float rotaionSpeed = 500; 
 
     int durability;
+    AudioSource source;
     private void Awake()
     {
+        source = GetComponent<AudioSource>();
         collider = GetComponent<BoxCollider>();
         rb = GetComponent<Rigidbody>();
         durability = properties.durability;
@@ -73,6 +75,8 @@ public class Wall : MonoBehaviour
 
             if (durability <= 0)
             {
+                source.clip = properties.destroyedClip;
+                source.Play();
                 durability = 0;
                 // gameObject.SetActive(false);
                 collider.enabled = false;
@@ -85,6 +89,8 @@ public class Wall : MonoBehaviour
                 StartCoroutine(DestroyTimer());
             }else if (durability < 2)
             {
+                source.clip = properties.damagedClip;
+                source.Play();
                 foreach (GameObject go in destructionlevels)
                 {
                     go.SetActive(false);
@@ -92,6 +98,78 @@ public class Wall : MonoBehaviour
                 destructionlevels[1].SetActive(true);
             }
         }
+        else
+        {
+            if (collision.gameObject.GetComponent<Rigidbody>() != null)
+            {
+                Rigidbody otherBody = collision.gameObject.GetComponent<Rigidbody>();
+                float otherForce = otherBody.velocity.magnitude * otherBody.mass;
+                if ((otherForce + GetImpactForce()) > 20 * durability)
+                {
+                    durability = 0;
+                    source.clip = properties.destroyedClip;
+                    source.Play();
+                    collider.enabled = false;
+                    rb.isKinematic = true;
+                    foreach (GameObject go in destructionlevels)
+                    {
+                        go.SetActive(false);
+                    }
+                    destructionlevels[2].SetActive(true);
+                    StartCoroutine(DestroyTimer());
+                }
+                else if ((otherForce + GetImpactForce()) > 10 * durability)
+                {
+                    durability--;
+
+                    source.clip = properties.damagedClip;
+                    source.Play();
+
+                    foreach (GameObject go in destructionlevels)
+                    {
+                        go.SetActive(false);
+                    }
+                    destructionlevels[1].SetActive(true);
+                }
+            }
+            else
+            {
+                if (GetImpactForce() > 20 * durability)
+                {
+                    durability = 0;
+                    source.clip = properties.destroyedClip;
+                    source.Play();
+                    collider.enabled = false;
+                    rb.isKinematic = true;
+                    foreach (GameObject go in destructionlevels)
+                    {
+                        go.SetActive(false);
+                    }
+                    destructionlevels[2].SetActive(true);
+                    StartCoroutine(DestroyTimer());
+                }
+                else if (GetImpactForce() > 10 * durability)
+                {
+                    durability = 0;
+
+                    source.clip = properties.damagedClip;
+                    source.Play();
+
+                    collider.enabled = false;
+                    rb.isKinematic = true;
+                    foreach (GameObject go in destructionlevels)
+                    {
+                        go.SetActive(false);
+                    }
+                    destructionlevels[2].SetActive(true);
+                    StartCoroutine(DestroyTimer());
+                }
+
+            }
+           
+        }
+
+        
     }
 
     public float GetImpactForce()

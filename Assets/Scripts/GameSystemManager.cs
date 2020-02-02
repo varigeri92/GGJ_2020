@@ -82,7 +82,6 @@ public class GameSystemManager : MonoBehaviour
 
     private void Awake()
     {
-        allpigsText.text = expectedPigCount.ToString();
         if (instance == null)
         {
             instance = this;
@@ -92,6 +91,7 @@ public class GameSystemManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        allpigsText.text = expectedPigCount.ToString();
         mainCam = Camera.main;
         foreach( Wall wall in GameObject.FindObjectsOfType<Wall>())
         {
@@ -99,6 +99,9 @@ public class GameSystemManager : MonoBehaviour
         }
         timeText.text = timetoBuild.ToString();
         ttb = timetoBuild;
+
+        woodCountText.text = Wood.ToString();
+        concreteCountText.text = Concrete.ToString();
     }
 
     public void OnCanonShot()
@@ -123,8 +126,6 @@ public class GameSystemManager : MonoBehaviour
         {
             gameOverOrWhatever = true;
             onLevelComplette();
-            Debug.Log("Thanx 4 Playing ou" +
-                "r little game");
             return;
         }
 
@@ -132,8 +133,8 @@ public class GameSystemManager : MonoBehaviour
         {
             wall.TurnKinematic(true);
         }
+        Camera.main.GetComponent<CameraController>().ZoomIn();
         onRoundOver();
-
         build = true;
         ttb = timetoBuild;
         timeText.text = timetoBuild.ToString();
@@ -155,7 +156,6 @@ public class GameSystemManager : MonoBehaviour
         {
             gameOverOrWhatever = true;
             build = false;
-            Debug.Log("Your Chickens Died a horrible death!");
             onGameOver();
         }
     }
