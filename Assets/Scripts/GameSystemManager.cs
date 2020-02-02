@@ -86,6 +86,7 @@ public class GameSystemManager : MonoBehaviour
             hitpoint = hit.point;
             hitpoint.z = 0;
             worldMousePosition = hitpoint;
+
         }
 
         if (Input.GetKeyDown(KeyCode.Space))

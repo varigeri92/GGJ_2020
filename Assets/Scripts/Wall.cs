@@ -13,6 +13,7 @@ public class Wall : MonoBehaviour
 
     [SerializeField] List<GameObject> destructionlevels = new List<GameObject>();
     int destuctionLevel = 0;
+    float rotaionSpeed = 500; 
 
     int durability;
     private void Awake()
@@ -32,12 +33,22 @@ public class Wall : MonoBehaviour
         if (!placed)
         {
             transform.parent.position = GameSystemManager.Instance.worldMousePosition;
+            float rotationAmount = Input.GetAxis("Mouse ScrollWheel");
+            if (rotationAmount > 0 || rotationAmount < 0)
+            {
+                transform.rotation =Quaternion.Euler(transform.rotation.eulerAngles +  new Vector3(0,0,rotationAmount) * rotaionSpeed * Time.deltaTime);
+            }
+
 
             if (Input.GetMouseButtonDown(0) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
             {
                 placed = true;
                 GameSystemManager.Instance.AddWall(this);
                 collider.enabled = true;
+            }
+            if (Input.GetMouseButtonDown(1) && !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+            {
+                Destroy(gameObject);
             }
         }
     }
@@ -88,7 +99,10 @@ public class Wall : MonoBehaviour
 
     public void TurnKinematic(bool turn)
     {
-        rb.isKinematic = turn;
+        if (rb != null)
+        {
+            rb.isKinematic = turn;
+        }
     }
 
     IEnumerator DestroyTimer()

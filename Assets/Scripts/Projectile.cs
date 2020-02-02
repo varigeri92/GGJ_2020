@@ -16,10 +16,17 @@ public class Projectile : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         GameSystemManager.Instance.StartTimer();
+        StartCoroutine(DestroyProjectile());
     }
 
     public float GetImpactForce()
     {
         return rb.mass * rb.velocity.magnitude;
+    }
+
+    IEnumerator DestroyProjectile()
+    {
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
     }
 }
